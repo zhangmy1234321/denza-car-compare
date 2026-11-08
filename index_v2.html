@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b10"><title>腾势车型智能对比</title>
+<style>
+:root{color-scheme:dark;--bg:#090b10;--panel:#141923;--line:#29313e;--gold:#d9b66b;--muted:#9ba5b4}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#20232b 0,#090b10 55%);color:#f5f2eb;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+header{padding:30px 18px 20px;text-align:center;border-bottom:1px solid #252b35}header small{color:var(--gold);letter-spacing:4px}h1{font-size:27px;margin:10px 0 7px}header p{margin:0;color:var(--muted);font-size:13px}
+main{max-width:900px;margin:auto;padding:18px 14px 40px}.intro{border:1px solid #4b412e;background:linear-gradient(120deg,#211e18,#131720);padding:15px;border-radius:15px;margin-bottom:18px}.intro b{color:var(--gold)}.intro p{font-size:13px;color:#c5c1b8;line-height:1.6;margin:7px 0 0}
+h2{font-size:17px;margin:22px 2px 12px}.choose{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.car{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;text-align:left;color:#fff;min-height:78px}.car.active{border-color:var(--gold);background:#211e18}.car strong{display:block;font-size:15px}.car span{font-size:12px;color:var(--muted);display:block;margin-top:5px}.car input{accent-color:var(--gold);margin-right:6px}
+.actions{display:flex;gap:9px;margin:15px 0}.btn{border:1px solid var(--gold);border-radius:10px;padding:11px 15px;background:var(--gold);color:#17130b;font-weight:700;flex:1}.btn.secondary{background:transparent;color:var(--gold)}
+#result{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:#11161e}table{border-collapse:collapse;width:100%;min-width:560px;font-size:13px}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:center}th{color:var(--gold);background:#191f29}td:first-child{text-align:left;color:#aeb7c4;background:#151b24}td{color:#eee}
+.note{font-size:12px;color:var(--muted);line-height:1.6;margin:12px 2px}.empty{padding:25px;text-align:center;color:var(--muted)}
+footer{text-align:center;padding:20px;color:#788291;font-size:11px}
+@media(min-width:650px){.choose{grid-template-columns:repeat(3,1fr)}main{padding-top:25px}}
+</style></head>
+<body>
+<header><small>DENZA · SMART COMPARISON</small><h1>腾势车型智能对比</h1><p>把差异看清楚，让选车更简单</p></header>
+<main>
+<div class="intro"><b>专业顾问 · 客观对比</b><p>选择你想比较的车型，快速查看价格、空间、动力、续航、智能驾驶与舒适配置。具体配置及权益以车辆实际年款和官方公布信息为准。</p></div>
+<h2>① 选择车型（最多 3 款）</h2><div class="choose" id="cars"></div>
+<div class="actions"><button class="btn" id="compare">开始对比</button><button class="btn secondary" id="reset">重置</button></div>
+<h2>② 配置差异对比</h2><div id="result"><div class="empty">请先选择至少两款车型，再点击“开始对比”</div></div>
+<p class="note">说明：当前为基础演示版本，未核实的车型参数会标注“待核实 / 待录入”，不会虚构配置。后续可继续补充各年款官方参数、价格及销售权益。</p>
+</main><footer>DENZA 车型对比工具 · 手机 / 平板 / 电脑均可使用</footer>
+<script>
+const data=[
+{name:"第二代腾势D9 DM-i",type:"豪华插混MPV",facts:{"车型定位":"豪华MPV","年款/版本":"2026款第二代车型","能源形式":"插电式混合动力","官方指导价":"待按具体配置核实"}},
+{name:"第二代腾势D9 EV",type:"豪华纯电MPV",facts:{"车型定位":"豪华MPV","年款/版本":"2026款第二代车型","能源形式":"纯电动","官方指导价":"36.98万元起（公开报道；以官方配置表为准）","CLTC纯电续航":"部分版本800km（具体配置待核实）"}},
+{name:"腾势N9闪充版",type:"大型六座豪华SUV",facts:{"车型定位":"大型六座SUV","年款/版本":"2026款闪充版","能源形式":"插电式混合动力","官方指导价":"40.98万—46.98万元","座位布局":"2+2+2六座","CLTC纯电续航":"420km","综合续航":"1520km","辅助驾驶":"天神之眼5.0（官方发布信息）","底盘/操控":"云辇-A闭式双腔空气悬架、易三方"}},
+{name:"腾势N8L闪充版",type:"家庭六座豪华SUV",facts:{"车型定位":"家庭六座SUV","年款/版本":"2026款闪充版","能源形式":"插电式混合动力","官方指导价":"待按具体配置核实"}},
+{name:"全新腾势Z9GT",type:"豪华GT",facts:{"车型定位":"豪华GT","年款/版本":"2026款","能源形式":"纯电 / 插混（分版本）","官方指导价":"26.98万—36.98万元（上市指导价，按版本区分）","CLTC纯电续航":"纯电版最高1036km（具体版本）"}},
+{name:"腾势Z9",type:"豪华轿车",facts:{"车型定位":"豪华轿车","年款/版本":"2026在售状态及配置待核实","能源形式":"待核实","官方指导价":"待按具体配置核实"}}
+];
+const rows=["车型定位","年款/版本","官方指导价","能源形式","座位布局","CLTC纯电续航","综合续航","辅助驾驶","底盘/操控","座舱屏幕","第二排配置","音响系统","充电/补能"];
+const root=document.getElementById('cars');
+data.forEach(c=>{let el=document.createElement('label');el.className='car';el.innerHTML='<strong><input type="checkbox" value="'+c.name+'">'+c.name+'</strong><span>'+c.type+'</span>';root.appendChild(el);el.querySelector('input').addEventListener('change',e=>{let checked=[...root.querySelectorAll('input:checked')];if(checked.length>3){e.target.checked=false;alert('最多选择 3 款车型');return}el.classList.toggle('active',e.target.checked)})});
+document.getElementById('compare').onclick=()=>{let names=[...root.querySelectorAll('input:checked')].map(x=>x.value);let out=document.getElementById('result');if(names.length<2){out.innerHTML='<div class="empty">请至少选择两款车型进行对比</div>';return}let html='<table><thead><tr><th>对比项目</th>'+names.map(n=>'<th>'+n+'</th>').join('')+'</tr></thead><tbody>';rows.forEach(r=>{html+='<tr><td>'+r+'</td>'+names.map(n=>'<td>'+(data.find(c=>c.name===n).facts[r]||'待核实 / 待录入')+'</td>').join('')+'</tr>'});out.innerHTML=html+'</tbody></table>'};
+document.getElementById('reset').onclick=()=>{root.querySelectorAll('input').forEach(x=>{x.checked=false;x.closest('label').classList.remove('active')});document.getElementById('result').innerHTML='<div class="empty">请先选择至少两款车型，再点击“开始对比”</div>'};
+</script></body></html>
